@@ -11,6 +11,7 @@ import android.widget.Toast;
 import it.therickys93.wikiapi.Off;
 import it.therickys93.wikiapi.On;
 import it.therickys93.wikiapi.Response;
+import it.therickys93.wikiapi.Status;
 import it.therickys93.wikiapi.WikiController;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int getLed(){
-        // String light = this.lightSpinner.getSelectedItemPosition();
         return this.lightSpinner.getSelectedItemPosition();
     }
 
@@ -49,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void offButtonClicked(View view){
         new OffButtonAsyncTask().execute();
+    }
+
+    public void statusButtonClicked(View view){
+        new StatusButtonAsyncTask().execute();
     }
 
     private class OnButtonAsyncTask extends AsyncTask<Void, Void, Boolean>{
@@ -97,6 +101,39 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(MainActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private class StatusButtonAsyncTask extends AsyncTask<Void, Void, Response>{
+
+        @Override
+        protected Response doInBackground(Void... voids) {
+            try {
+                WikiController wikiController = new WikiController(getServer());
+                String response = wikiController.execute(new it.therickys93.wikiapi.Status(KEY));
+                Response status = Response.parseSuccess(response);
+                return status;
+            } catch(Exception e) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Response status) {
+            super.onPostExecute(status);
+            if(status == null){
+                Toast.makeText(MainActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
+            } else {
+                if(status.ok()) {
+                    if (status.message().charAt(getLed()) == '1'){
+                        Toast.makeText(MainActivity.this, "ACCESO", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "SPENTO", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }

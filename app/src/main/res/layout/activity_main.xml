@@ -60,6 +60,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <Button
+            android:onClick="statusButtonClicked"
+            android:id="@+id/status_button"
+            android:text="STATUS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
 
     </LinearLayout>
 
