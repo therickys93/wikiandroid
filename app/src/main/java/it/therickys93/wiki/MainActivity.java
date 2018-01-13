@@ -10,15 +10,14 @@ import android.widget.Toast;
 
 import it.therickys93.wikiapi.Off;
 import it.therickys93.wikiapi.On;
+import it.therickys93.wikiapi.Reset;
 import it.therickys93.wikiapi.Response;
-import it.therickys93.wikiapi.Status;
 import it.therickys93.wikiapi.WikiController;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String SERVER = "http://192.168.15.12";
     private static final String KEY = "arduino";
-    private static final int LED = 0;
 
     private EditText serverEditText;
     private Spinner  lightSpinner;
@@ -55,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
         new StatusButtonAsyncTask().execute();
     }
 
+    public void resetButtonClicked(View view){
+        new ResetButtonAsyncTask().execute();
+    }
+
     private class OnButtonAsyncTask extends AsyncTask<Void, Void, Boolean>{
 
         @Override
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             if(aBoolean){
                 Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(MainActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -100,7 +103,32 @@ public class MainActivity extends AppCompatActivity {
             if(aBoolean){
                 Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(MainActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private class ResetButtonAsyncTask extends AsyncTask<Void, Void, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            try {
+                WikiController wikiController = new WikiController(getServer());
+                String response = wikiController.execute(new Reset(KEY));
+                Response status = Response.parseSuccess(response);
+                return status.ok();
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(aBoolean){
+                Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
             }
         }
     }

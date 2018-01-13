@@ -49,21 +49,28 @@
         <Button
             android:onClick="onButtonClicked"
             android:id="@+id/on_button"
-            android:text="ON"
+            android:text="ACCENDI"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <Button
             android:onClick="offButtonClicked"
             android:id="@+id/off_button"
-            android:text="OFF"
+            android:text="SPEGNI"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <Button
             android:onClick="statusButtonClicked"
             android:id="@+id/status_button"
-            android:text="STATUS"
+            android:text="STATO"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:onClick="resetButtonClicked"
+            android:id="@+id/reset_button"
+            android:text="RESET"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
