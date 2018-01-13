@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+def travisBuilNumber = System.getenv("TRAVIS_BUILD_NUMBER")
+def int buildNumber = travisBuilNumber != null ? Integer.valueOf(travisBuilNumber) : 1
+
 android {
     signingConfigs {
         config {
@@ -15,7 +18,7 @@ android {
         applicationId "it.therickys93.wiki"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 1
+        versionCode buildNumber
         versionName "0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
