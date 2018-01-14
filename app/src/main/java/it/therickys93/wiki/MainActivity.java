@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import it.therickys93.wikiapi.Off;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText serverEditText;
     private EditText keyEditText;
     private Spinner  lightSpinner;
+    private TextView versionTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +33,12 @@ public class MainActivity extends AppCompatActivity {
         serverEditText = (EditText) findViewById(R.id.server_edit_text);
         keyEditText = (EditText) findViewById(R.id.key_edit_text);
         lightSpinner = (Spinner) findViewById(R.id.spinner_light);
+        versionTextView = (TextView) findViewById(R.id.version_label);
 
         serverEditText.setText(SERVER);
         keyEditText.setText(KEY);
+
+        versionTextView.setText("Versione applicazione: " + BuildConfig.VERSION_NAME + "." + BuildConfig.VERSION_CODE);
 
     }
 
