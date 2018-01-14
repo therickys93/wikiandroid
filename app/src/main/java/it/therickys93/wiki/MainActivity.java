@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String KEY = "arduino";
 
     private EditText serverEditText;
+    private EditText keyEditText;
     private Spinner  lightSpinner;
 
     @Override
@@ -28,14 +29,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         serverEditText = (EditText) findViewById(R.id.server_edit_text);
-        lightSpinner = (Spinner) findViewById(R.id.spinner1);
+        keyEditText = (EditText) findViewById(R.id.key_edit_text);
+        lightSpinner = (Spinner) findViewById(R.id.spinner_light);
 
         serverEditText.setText(SERVER);
+        keyEditText.setText(KEY);
 
     }
 
     private String getServer(){
         return this.serverEditText.getText().toString();
+    }
+
+    private String getKey(){
+        return this.keyEditText.getText().toString();
     }
 
     private int getLed(){
@@ -64,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... voids) {
             try {
                 WikiController wikiController = new WikiController(getServer());
-                String response = wikiController.execute(new On(KEY, getLed()));
+                String response = wikiController.execute(new On(getKey(), getLed()));
                 Response status = Response.parseSuccess(response);
                 return status.ok();
             } catch (Exception e){
@@ -89,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... voids) {
             try {
                 WikiController wikiController = new WikiController(getServer());
-                String response = wikiController.execute(new Off(KEY, getLed()));
+                String response = wikiController.execute(new Off(getKey(), getLed()));
                 Response status = Response.parseSuccess(response);
                 return status.ok();
             } catch (Exception e){
@@ -114,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... voids) {
             try {
                 WikiController wikiController = new WikiController(getServer());
-                String response = wikiController.execute(new Reset(KEY));
+                String response = wikiController.execute(new Reset(getKey()));
                 Response status = Response.parseSuccess(response);
                 return status.ok();
             } catch (Exception e) {
@@ -139,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         protected Response doInBackground(Void... voids) {
             try {
                 WikiController wikiController = new WikiController(getServer());
-                String response = wikiController.execute(new it.therickys93.wikiapi.Status(KEY));
+                String response = wikiController.execute(new it.therickys93.wikiapi.Status(getKey()));
                 Response status = Response.parseSuccess(response);
                 return status;
             } catch(Exception e) {
