@@ -14,11 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import it.therickys93.wikiapi.Off;
-import it.therickys93.wikiapi.On;
-import it.therickys93.wikiapi.Reset;
-import it.therickys93.wikiapi.Response;
-import it.therickys93.wikiapi.WikiController;
+import it.therickys93.wikiapi.controller.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -117,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
-                WikiController wikiController = new WikiController(getServer());
+                WikiRequest wikiController = new WikiRequest(getServer());
                 String response = wikiController.execute(new On(getKey(), getLed()));
                 Response status = Response.parseSuccess(response);
                 return status.ok();
@@ -142,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
-                WikiController wikiController = new WikiController(getServer());
+                WikiRequest wikiController = new WikiRequest(getServer());
                 String response = wikiController.execute(new Off(getKey(), getLed()));
                 Response status = Response.parseSuccess(response);
                 return status.ok();
@@ -167,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
-                WikiController wikiController = new WikiController(getServer());
+                WikiRequest wikiController = new WikiRequest(getServer());
                 String response = wikiController.execute(new Reset(getKey()));
                 Response status = Response.parseSuccess(response);
                 return status.ok();
@@ -192,8 +188,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Response doInBackground(Void... voids) {
             try {
-                WikiController wikiController = new WikiController(getServer());
-                String response = wikiController.execute(new it.therickys93.wikiapi.Status(getKey()));
+                WikiRequest wikiController = new WikiRequest(getServer());
+                String response = wikiController.execute(new it.therickys93.wikiapi.controller.Status(getKey()));
                 Response status = Response.parseSuccess(response);
                 return status;
             } catch(Exception e) {
