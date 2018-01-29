@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 def travisBuilNumber = System.getenv("TRAVIS_BUILD_NUMBER")
-def int buildNumber = travisBuilNumber != null ? Integer.valueOf(travisBuilNumber) : 1
+def int buildNumber = travisBuilNumber != null ? Integer.valueOf(travisBuilNumber) : 2
 
 android {
     signingConfigs {

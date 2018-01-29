@@ -1,7 +1,12 @@
 package it.therickys93.wiki;
 
 import android.content.Context;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import it.therickys93.wikiapi.model.House;
+import it.therickys93.wikiapi.model.Led;
 
 /**
  * Created by Ricky on 1/29/18.
@@ -25,6 +30,14 @@ public class HouseUtils {
             FileUtils.saveToFile(context, filename, house.toJson().toString());
             return house;
         }
+    }
+
+    public static List<Led> getLedsFromHouse(House house){
+        List<Led> leds = new ArrayList<>();
+        for(int index = 0; index < house.getLedCount(); index++){
+            leds.add(house.getLedAt(index));
+        }
+        return leds;
     }
 
 }

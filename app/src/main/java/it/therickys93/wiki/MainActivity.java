@@ -1,11 +1,15 @@
 package it.therickys93.wiki;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         lightSpinner = (Spinner) findViewById(R.id.spinner_light);
         versionTextView = (TextView) findViewById(R.id.version_label);
 
+        // carica dal file oppure ne crea uno nuovo vuoto
         MainActivity.house = HouseUtils.loadHouseFromFile(MainActivity.getAppContext(), WIKI_FILENAME);
 
         SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
@@ -90,6 +95,26 @@ public class MainActivity extends AppCompatActivity {
 
         versionTextView.setText("Versione applicazione: " + BuildConfig.VERSION_NAME + "." + BuildConfig.VERSION_CODE);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()){
+            case R.id.house:
+                intent = new Intent(this, HouseConfigurationActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private String getServer(){
