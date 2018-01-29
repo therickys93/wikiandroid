@@ -15,11 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import it.therickys93.wikiapi.controller.*;
+import it.therickys93.wikiapi.model.House;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String SERVER = "192.168.15.12";
     private static final String KEY = "arduino";
+    public static final String WIKI_FILENAME = "wiki.json";
 
     private EditText serverEditText;
     private EditText keyEditText;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView versionTextView;
 
     private static Context context;
+    public static House house;
 
     public static Context getAppContext(){
         return MainActivity.context;
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         lightSpinner = (Spinner) findViewById(R.id.spinner_light);
         versionTextView = (TextView) findViewById(R.id.version_label);
 
+        MainActivity.house = HouseUtils.loadHouseFromFile(MainActivity.getAppContext(), WIKI_FILENAME);
 
         SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
         String server = settings.getString("WIKI_SERVER", SERVER);
