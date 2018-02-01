@@ -13,22 +13,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import it.therickys93.wikiapi.controller.*;
 import it.therickys93.wikiapi.model.House;
+import it.therickys93.wikiapi.model.Led;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String SERVER = "192.168.15.12";
-    private static final String KEY = "arduino";
+    // private static final String KEY = "arduino";
     public static final String WIKI_FILENAME = "wiki.json";
 
     private EditText serverEditText;
-    private EditText keyEditText;
+    // private EditText keyEditText;
     private Spinner  lightSpinner;
     private TextView versionTextView;
 
@@ -47,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.context = getApplicationContext();
 
         serverEditText = (EditText) findViewById(R.id.server_edit_text);
-        keyEditText = (EditText) findViewById(R.id.key_edit_text);
+        // keyEditText = (EditText) findViewById(R.id.key_edit_text);
         lightSpinner = (Spinner) findViewById(R.id.spinner_light);
         versionTextView = (TextView) findViewById(R.id.version_label);
 
@@ -57,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
         String server = settings.getString("WIKI_SERVER", SERVER);
         serverEditText.setText(server);
-        String key = settings.getString("WIKI_KEY", KEY);
-        keyEditText.setText(key);
+        // String key = settings.getString("WIKI_KEY", KEY);
+        // keyEditText.setText(key);
 
         serverEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         serverEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -76,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /*
         keyEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         keyEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -92,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        */
 
         versionTextView.setText("Versione applicazione: " + BuildConfig.VERSION_NAME + "." + BuildConfig.VERSION_CODE);
 
@@ -102,6 +109,31 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return true;
+    }
+
+    private List<String> getLedNames(){
+        List<String> names = new ArrayList<>();
+        List<Led> leds = HouseUtils.getLedsFromHouse(MainActivity.house);
+        if(leds.size() > 0) {
+            for (Led l : leds) {
+                names.add(l.getName());
+            }
+        } else {
+            names.add("Nessun Led trovato");
+        }
+        return names;
+    }
+
+    private void populateSpinner(){
+        List<String> leds = getLedNames();
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, leds);
+        this.lightSpinner.setAdapter(dataAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        populateSpinner();
     }
 
     @Override
@@ -121,22 +153,18 @@ public class MainActivity extends AppCompatActivity {
         return "http://" + this.serverEditText.getText().toString();
     }
 
-    private String getKey(){
-        return this.keyEditText.getText().toString();
-    }
-
-    private int getLed(){
-        return this.lightSpinner.getSelectedItemPosition();
-    }
 
     public void onButtonClicked(View view){
-        new OnButtonAsyncTask().execute();
+        Led led = MainActivity.house.getLedAt(this.lightSpinner.getSelectedItemPosition());
+        new OnButtonAsyncTask().execute(led);
     }
 
     public void offButtonClicked(View view){
-        new OffButtonAsyncTask().execute();
+        Led led = MainActivity.house.getLedAt(this.lightSpinner.getSelectedItemPosition());
+        new OffButtonAsyncTask().execute(led);
     }
 
+    /*
     public void statusButtonClicked(View view){
         new StatusButtonAsyncTask().execute();
     }
@@ -144,14 +172,15 @@ public class MainActivity extends AppCompatActivity {
     public void resetButtonClicked(View view){
         new ResetButtonAsyncTask().execute();
     }
+    */
 
-    private class OnButtonAsyncTask extends AsyncTask<Void, Void, Boolean>{
+    private class OnButtonAsyncTask extends AsyncTask<Led, Void, Boolean>{
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
+        protected Boolean doInBackground(Led... led) {
             try {
                 WikiRequest wikiController = new WikiRequest(getServer());
-                String response = wikiController.execute(new On(getKey(), getLed()));
+                String response = wikiController.execute(new On(led[0]));
                 Response status = Response.parseSuccess(response);
                 return status.ok();
             } catch (Exception e){
@@ -170,13 +199,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class OffButtonAsyncTask extends AsyncTask<Void, Void, Boolean>{
+    private class OffButtonAsyncTask extends AsyncTask<Led, Void, Boolean>{
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
+        protected Boolean doInBackground(Led... led) {
             try {
                 WikiRequest wikiController = new WikiRequest(getServer());
-                String response = wikiController.execute(new Off(getKey(), getLed()));
+                String response = wikiController.execute(new Off(led[0]));
                 Response status = Response.parseSuccess(response);
                 return status.ok();
             } catch (Exception e){
@@ -195,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /*
     private class ResetButtonAsyncTask extends AsyncTask<Void, Void, Boolean>{
 
         @Override
@@ -252,5 +282,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    */
 
 }

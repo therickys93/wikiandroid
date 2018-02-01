@@ -84,6 +84,7 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
         } else {
             this.leds.remove(index);
             this.adapter.updateLeds(this.leds);
+            MainActivity.house.removeLedAt(index);
             this.adapter.notifyDataSetChanged();
         }
         return true;
