@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -15,7 +16,7 @@ import java.util.List;
 
 import it.therickys93.wikiapi.model.Led;
 
-public class HouseConfigurationActivity extends AppCompatActivity {
+public class HouseConfigurationActivity extends AppCompatActivity implements AdapterView.OnItemLongClickListener {
 
     private ListView listView;
     private List<Led> leds;
@@ -28,9 +29,10 @@ public class HouseConfigurationActivity extends AppCompatActivity {
 
         // ledlist
         this.listView = (ListView) findViewById(R.id.ledlist);
-        leds = HouseUtils.getLedsFromHouse(MainActivity.house);
-        adapter = new LedListAdapter(HouseConfigurationActivity.this, leds);
-        listView.setAdapter(adapter);
+        this.leds = HouseUtils.getLedsFromHouse(MainActivity.house);
+        this.adapter = new LedListAdapter(HouseConfigurationActivity.this, leds);
+        this.listView.setAdapter(adapter);
+        this.listView.setOnItemLongClickListener(this);
     }
 
     public void save(View view){
@@ -73,5 +75,17 @@ public class HouseConfigurationActivity extends AppCompatActivity {
         });
         AlertDialog b = dialogBuilder.create();
         b.show();
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int index, long l) {
+        if(leds == null){
+
+        } else {
+            this.leds.remove(index);
+            this.adapter.updateLeds(this.leds);
+            this.adapter.notifyDataSetChanged();
+        }
+        return true;
     }
 }

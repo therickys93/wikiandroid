@@ -34,8 +34,8 @@ public class LedListAdapter extends BaseAdapter {
         return leds.size();
     }
 
-    public void updateProdotti(List<Led> prodotti){
-        this.leds = prodotti;
+    public void updateLeds(List<Led> leds){
+        this.leds = leds;
     }
 
     public Led getItem(int position) {
