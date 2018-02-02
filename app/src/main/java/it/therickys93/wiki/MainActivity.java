@@ -29,11 +29,9 @@ import it.therickys93.wikiapi.model.Led;
 public class MainActivity extends AppCompatActivity {
 
     private static final String SERVER = "192.168.15.12";
-    // private static final String KEY = "arduino";
     public static final String WIKI_FILENAME = "wiki.json";
 
     private EditText serverEditText;
-    // private EditText keyEditText;
     private Spinner  lightSpinner;
     private TextView versionTextView;
 
@@ -52,18 +50,14 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.context = getApplicationContext();
 
         serverEditText = (EditText) findViewById(R.id.server_edit_text);
-        // keyEditText = (EditText) findViewById(R.id.key_edit_text);
         lightSpinner = (Spinner) findViewById(R.id.spinner_light);
         versionTextView = (TextView) findViewById(R.id.version_label);
 
-        // carica dal file oppure ne crea uno nuovo vuoto
         MainActivity.house = HouseUtils.loadHouseFromFile(MainActivity.getAppContext(), WIKI_FILENAME);
 
         SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
         String server = settings.getString("WIKI_SERVER", SERVER);
         serverEditText.setText(server);
-        // String key = settings.getString("WIKI_KEY", KEY);
-        // keyEditText.setText(key);
 
         serverEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         serverEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -80,25 +74,6 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        /*
-        keyEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        keyEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if(i == EditorInfo.IME_ACTION_DONE){
-                    InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    in.hideSoftInputFromWindow(keyEditText.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
-                    // save the new value
-                    SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString("WIKI_KEY", keyEditText.getText().toString());
-                    editor.commit();
-                }
-                return false;
-            }
-        });
-        */
 
         versionTextView.setText("Versione applicazione: " + BuildConfig.VERSION_NAME + "." + BuildConfig.VERSION_CODE);
 
@@ -153,26 +128,29 @@ public class MainActivity extends AppCompatActivity {
         return "http://" + this.serverEditText.getText().toString();
     }
 
+    private Led getLed() {
+        if(MainActivity.house.getLedCount() > 0) {
+            return MainActivity.house.getLedAt(this.lightSpinner.getSelectedItemPosition());
+        } else {
+            return null;
+        }
+    }
 
     public void onButtonClicked(View view){
-        Led led = MainActivity.house.getLedAt(this.lightSpinner.getSelectedItemPosition());
-        new OnButtonAsyncTask().execute(led);
+        new OnButtonAsyncTask().execute(getLed());
     }
 
     public void offButtonClicked(View view){
-        Led led = MainActivity.house.getLedAt(this.lightSpinner.getSelectedItemPosition());
-        new OffButtonAsyncTask().execute(led);
+        new OffButtonAsyncTask().execute(getLed());
     }
 
-    /*
     public void statusButtonClicked(View view){
-        new StatusButtonAsyncTask().execute();
+        new StatusButtonAsyncTask().execute(getLed());
     }
 
     public void resetButtonClicked(View view){
-        new ResetButtonAsyncTask().execute();
+        new ResetButtonAsyncTask().execute(getLed());
     }
-    */
 
     private class OnButtonAsyncTask extends AsyncTask<Led, Void, Boolean>{
 
@@ -224,14 +202,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*
-    private class ResetButtonAsyncTask extends AsyncTask<Void, Void, Boolean>{
+
+    private class ResetButtonAsyncTask extends AsyncTask<Led, Void, Boolean>{
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
+        protected Boolean doInBackground(Led... led) {
             try {
                 WikiRequest wikiController = new WikiRequest(getServer());
-                String response = wikiController.execute(new Reset(getKey()));
+                String response = wikiController.execute(new Reset(led[0].getKey()));
                 Response status = Response.parseSuccess(response);
                 return status.ok();
             } catch (Exception e) {
@@ -250,16 +228,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class StatusButtonAsyncTask extends AsyncTask<Void, Void, Response>{
+    private class StatusButtonAsyncTask extends AsyncTask<Led, Void, Response> {
 
         @Override
-        protected Response doInBackground(Void... voids) {
+        protected Response doInBackground(Led... led) {
             try {
                 WikiRequest wikiController = new WikiRequest(getServer());
-                String response = wikiController.execute(new it.therickys93.wikiapi.controller.Status(getKey()));
+                String response = wikiController.execute(new it.therickys93.wikiapi.controller.Status(led[0].getKey()));
                 Response status = Response.parseSuccess(response);
                 return status;
-            } catch(Exception e) {
+            } catch (Exception e) {
                 return null;
             }
         }
@@ -267,11 +245,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Response status) {
             super.onPostExecute(status);
-            if(status == null){
+            if (status == null) {
                 Toast.makeText(MainActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
             } else {
-                if(status.ok()) {
-                    if (status.message().charAt(getLed()) == '1'){
+                if (status.ok()) {
+                    if (status.message().charAt(lightSpinner.getSelectedItemPosition()) == '1') {
                         Toast.makeText(MainActivity.this, "ACCESO", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(MainActivity.this, "SPENTO", Toast.LENGTH_SHORT).show();
@@ -282,6 +260,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    */
 
 }
