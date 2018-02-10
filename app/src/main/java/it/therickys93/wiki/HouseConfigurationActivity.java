@@ -1,10 +1,16 @@
 package it.therickys93.wiki;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -14,6 +20,11 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import it.therickys93.wikiapi.controller.Download;
+import it.therickys93.wikiapi.controller.Response;
+import it.therickys93.wikiapi.controller.Upload;
+import it.therickys93.wikiapi.controller.WikiRequest;
+import it.therickys93.wikiapi.model.House;
 import it.therickys93.wikiapi.model.Led;
 
 public class HouseConfigurationActivity extends AppCompatActivity implements AdapterView.OnItemLongClickListener {
@@ -29,10 +40,8 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
 
         // ledlist
         this.listView = (ListView) findViewById(R.id.ledlist);
-        this.leds = HouseUtils.getLedsFromHouse(MainActivity.house);
-        this.adapter = new LedListAdapter(HouseConfigurationActivity.this, leds);
-        this.listView.setAdapter(adapter);
         this.listView.setOnItemLongClickListener(this);
+        updateUI();
     }
 
     public void save(View view){
@@ -63,9 +72,7 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
                 int position = ledPosition.getSelectedItemPosition();
                 MainActivity.house.addLed(new Led(name, key, position));
                 // reload the new list
-                leds = HouseUtils.getLedsFromHouse(MainActivity.house);
-                adapter = new LedListAdapter(HouseConfigurationActivity.this, leds);
-                listView.setAdapter(adapter);
+                updateUI();
             }
         });
         dialogBuilder.setNegativeButton("Cancella", new DialogInterface.OnClickListener() {
@@ -75,6 +82,12 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
         });
         AlertDialog b = dialogBuilder.create();
         b.show();
+    }
+
+    private void updateUI() {
+        leds = HouseUtils.getLedsFromHouse(MainActivity.house);
+        adapter = new LedListAdapter(HouseConfigurationActivity.this, leds);
+        listView.setAdapter(adapter);
     }
 
     @Override
@@ -88,5 +101,81 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
             this.adapter.notifyDataSetChanged();
         }
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.house_configuration_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.upload:
+                new UploadAsyncTask().execute();
+                return true;
+            case R.id.download:
+                new DownloadAsyncTask().execute();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private class UploadAsyncTask extends AsyncTask<Void, Void, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            try {
+                SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
+                String server = settings.getString("WIKI_SERVER", MainActivity.SERVER);
+                WikiRequest request = new WikiRequest("http://" + server);
+                String response = request.execute(new Upload(MainActivity.house));
+                Response res = Response.parseSuccess(response);
+                return res.ok();
+            } catch (Exception e){
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(aBoolean){
+                Toast.makeText(HouseConfigurationActivity.this, "OK", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(HouseConfigurationActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private class DownloadAsyncTask extends AsyncTask<Void, Void, House>{
+
+        @Override
+        protected House doInBackground(Void... voids) {
+            try {
+                SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
+                String server = settings.getString("WIKI_SERVER", MainActivity.SERVER);
+                WikiRequest request = new WikiRequest("http://" + server);
+                String response = request.execute(new Download());
+                return House.fromJson(response);
+            } catch (Exception e){
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(House house) {
+            super.onPostExecute(house);
+            if(house == null){
+                Toast.makeText(HouseConfigurationActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
+            } else {
+                MainActivity.house = house;
+                updateUI();
+                Toast.makeText(HouseConfigurationActivity.this, "OK", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

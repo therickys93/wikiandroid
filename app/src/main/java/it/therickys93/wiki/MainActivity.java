@@ -28,7 +28,7 @@ import it.therickys93.wikiapi.model.Led;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String SERVER = "192.168.15.12";
+    public static final String SERVER = "192.168.15.12";
     public static final String WIKI_FILENAME = "wiki.json";
 
     private EditText serverEditText;
