@@ -4,11 +4,13 @@
 
     <item
         android:id="@+id/upload"
+        android:icon="@android:drawable/stat_sys_upload_done"
         android:title="Upload"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/download"
+        android:icon="@android:drawable/stat_sys_download_done"
         android:title="Download"
         app:showAsAction="always"/>
 
