@@ -115,9 +115,19 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch (item.getItemId()){
+            case R.id.main:
+                intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
             case R.id.house:
                 intent = new Intent(this, HouseConfigurationActivity.class);
                 startActivity(intent);
+                return true;
+            case R.id.ai:
+                intent = new Intent(this, AIActivity.class);
+                startActivity(intent);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
