@@ -17,7 +17,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HouseConfigurationActivity"></activity>
+        <activity android:name=".HouseConfigurationActivity" />
+        <activity android:name=".AIActivity"></activity>
     </application>
 
 </manifest>

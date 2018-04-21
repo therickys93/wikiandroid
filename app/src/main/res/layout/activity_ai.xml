@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:weightSum="11"
+android:background="@drawable/bg_gradient"
+android:orientation="vertical" >
+
+<it.therickys93.wiki.TypeWriter
+    android:id="@+id/inputMessageTypeWriter"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="5dp"
+    android:layout_marginLeft="25dp"
+    android:layout_marginRight="25dp"
+    android:textColor="@color/white"
+    android:layout_weight="1"
+    android:textAlignment="textEnd"
+    android:textSize="18dp"
+    android:textStyle="normal" />
+
+
+<it.therickys93.wiki.TypeWriter
+    android:id="@+id/outputMessageTypeWriter"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true"
+    android:layout_marginLeft="25dp"
+    android:layout_marginRight="25dp"
+    android:textColor="@color/white"
+    android:layout_weight="10"
+    android:textAlignment="textStart"
+    android:textSize="18dp"
+    android:textStyle="normal" />
+
+<LinearLayout
+    android:id="@+id/linear"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_marginBottom="5dp"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <ImageButton
+        android:id="@+id/btnSpeak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:src="@mipmap/ico_mic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Premi sul microfono"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="normal" />
+</LinearLayout>
+
+</LinearLayout>
