@@ -1,7 +1,6 @@
 package it.therickys93.wiki;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
@@ -23,7 +22,7 @@ import java.util.List;
 import it.therickys93.wikiapi.controller.Download;
 import it.therickys93.wikiapi.controller.Response;
 import it.therickys93.wikiapi.controller.Upload;
-import it.therickys93.wikiapi.controller.WikiRequest;
+import it.therickys93.wikiapi.controller.WikiController;
 import it.therickys93.wikiapi.model.House;
 import it.therickys93.wikiapi.model.Led;
 
@@ -131,7 +130,7 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
             try {
                 SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
                 String server = settings.getString("WIKI_SERVER", MainActivity.SERVER);
-                WikiRequest request = new WikiRequest("http://" + server);
+                WikiController request = new WikiController("http://" + server);
                 String response = request.execute(new Upload(MainActivity.house));
                 Response res = Response.parseSuccess(response);
                 return res.ok();
@@ -158,7 +157,7 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
             try {
                 SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
                 String server = settings.getString("WIKI_SERVER", MainActivity.SERVER);
-                WikiRequest request = new WikiRequest("http://" + server);
+                WikiController request = new WikiController("http://" + server);
                 String response = request.execute(new Download());
                 return House.fromJson(response);
             } catch (Exception e){

@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Led... led) {
             try {
-                WikiRequest wikiController = new WikiRequest(getServer());
+                WikiController wikiController = new WikiController(getServer());
                 String response = wikiController.execute(new On(led[0]));
                 Response status = Response.parseSuccess(response);
                 return status.ok();
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Led... led) {
             try {
-                WikiRequest wikiController = new WikiRequest(getServer());
+                WikiController wikiController = new WikiController(getServer());
                 String response = wikiController.execute(new Off(led[0]));
                 Response status = Response.parseSuccess(response);
                 return status.ok();
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Led... led) {
             try {
-                WikiRequest wikiController = new WikiRequest(getServer());
+                WikiController wikiController = new WikiController(getServer());
                 String response = wikiController.execute(new Reset(led[0].getKey()));
                 Response status = Response.parseSuccess(response);
                 return status.ok();
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Response doInBackground(Led... led) {
             try {
-                WikiRequest wikiController = new WikiRequest(getServer());
+                WikiController wikiController = new WikiController(getServer());
                 String response = wikiController.execute(new it.therickys93.wikiapi.controller.Status(led[0].getKey()));
                 Response status = Response.parseSuccess(response);
                 return status;
