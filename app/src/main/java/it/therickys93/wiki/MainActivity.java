@@ -154,6 +154,14 @@ public class MainActivity extends AppCompatActivity {
         new OffButtonAsyncTask().execute(getLed());
     }
 
+    public void openButtonClicked(View view){
+        new OpenCloseAsyncTask().execute(getLed());
+    }
+
+    public void closeButtonClicked(View view){
+        new OpenCloseAsyncTask().execute(getLed());
+    }
+
     public void statusButtonClicked(View view){
         new StatusButtonAsyncTask().execute(getLed());
     }
@@ -194,6 +202,32 @@ public class MainActivity extends AppCompatActivity {
             try {
                 WikiController wikiController = new WikiController(getServer());
                 String response = wikiController.execute(new Off(led[0]));
+                Response status = Response.parseSuccess(response);
+                return status.ok();
+            } catch (Exception e){
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(aBoolean){
+                Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+    private class OpenCloseAsyncTask extends AsyncTask<Led, Void, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Led... led) {
+            try {
+                WikiController wikiController = new WikiController(getServer());
+                String response = wikiController.execute(new OpenClose(led[0]));
                 Response status = Response.parseSuccess(response);
                 return status.ok();
             } catch (Exception e){

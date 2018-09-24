@@ -69,27 +69,62 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:weightSum="2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Button
             android:onClick="onButtonClicked"
             android:id="@+id/on_button"
             android:text="ACCENDI"
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <Button
             android:onClick="offButtonClicked"
             android:id="@+id/off_button"
+            android:layout_weight="1"
             android:text="SPEGNI"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:onClick="openButtonClicked"
+            android:id="@+id/open_button"
+            android:text="APRI"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:onClick="closeButtonClicked"
+            android:id="@+id/close_button"
+            android:text="CHIUDI"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <Button
             android:onClick="statusButtonClicked"
             android:id="@+id/status_button"
             android:text="STATO"
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -97,6 +132,7 @@
             android:onClick="resetButtonClicked"
             android:id="@+id/reset_button"
             android:text="RESET"
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
