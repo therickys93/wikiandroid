@@ -32,6 +32,18 @@ android {
 
 }
 
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        def apkName = "Wiki-${variant.versionName}.${variant.versionCode}";
+        if (variant.buildType.name == "release") {
+            apkName += "-RELEASE.apk";
+        } else {
+            apkName += "-SNAPSHOT.apk";
+        }
+        outputFileName = apkName
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2', {
