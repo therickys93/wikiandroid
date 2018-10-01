@@ -2,6 +2,7 @@ package it.therickys93.wiki;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
@@ -10,6 +11,9 @@ import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -24,13 +28,31 @@ public class QRCodeScannerActivity extends AppCompatActivity {
     private CodeScanner mCodeScanner;
     private static final int RC_PERMISSION = 10;
     private boolean mPermissionGranted;
+    private CodeScannerView scannerView;
+    private int cameraID = Camera.CameraInfo.CAMERA_FACING_BACK;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode_scanner);
-        CodeScannerView scannerView = (CodeScannerView) findViewById(R.id.scanner_view);
+        scannerView = (CodeScannerView) findViewById(R.id.scanner_view);
         mCodeScanner = new CodeScanner(this, scannerView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                mPermissionGranted = false;
+                requestPermissions(new String[] {Manifest.permission.CAMERA}, RC_PERMISSION);
+            } else {
+                mPermissionGranted = true;
+                permissionOk();
+            }
+        } else {
+            mPermissionGranted = true;
+            permissionOk();
+        }
+
+    }
+
+    private void permissionOk(){
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull final Result result) {
@@ -55,17 +77,29 @@ public class QRCodeScannerActivity extends AppCompatActivity {
                 mCodeScanner.startPreview();
             }
         });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                mPermissionGranted = false;
-                requestPermissions(new String[] {Manifest.permission.CAMERA}, RC_PERMISSION);
-            } else {
-                mPermissionGranted = true;
-            }
-        } else {
-            mPermissionGranted = true;
-        }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.qrcode_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.change_camera:
+                if(cameraID == Camera.CameraInfo.CAMERA_FACING_FRONT)
+                    cameraID = Camera.CameraInfo.CAMERA_FACING_BACK;
+                else if(cameraID == Camera.CameraInfo.CAMERA_FACING_BACK)
+                    cameraID = Camera.CameraInfo.CAMERA_FACING_FRONT;
+                mCodeScanner.setCamera(cameraID);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -84,13 +118,17 @@ public class QRCodeScannerActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mCodeScanner.startPreview();
-        mCodeScanner.setCamera(Camera.CameraInfo.CAMERA_FACING_FRONT);
+        if(mPermissionGranted) {
+            mCodeScanner.startPreview();
+            mCodeScanner.setCamera(cameraID);
+        }
     }
 
     @Override
     protected void onPause() {
-        mCodeScanner.releaseResources();
+        if(mPermissionGranted) {
+            mCodeScanner.releaseResources();
+        }
         super.onPause();
     }
 }
