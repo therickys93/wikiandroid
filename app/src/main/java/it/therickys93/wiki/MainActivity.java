@@ -55,9 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         MainActivity.house = HouseUtils.loadHouseFromFile(MainActivity.getAppContext(), WIKI_FILENAME);
 
-        SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
-        String server = settings.getString("WIKI_SERVER", SERVER);
-        serverEditText.setText(server);
+        populateServer();
 
         serverEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         serverEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -99,6 +97,12 @@ public class MainActivity extends AppCompatActivity {
         return names;
     }
 
+    private void populateServer(){
+        SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
+        String server = settings.getString("WIKI_SERVER", SERVER);
+        serverEditText.setText(server);
+    }
+
     private void populateSpinner(){
         List<String> leds = getLedNames();
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, leds);
@@ -109,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         populateSpinner();
+        populateServer();
     }
 
     @Override
@@ -134,8 +139,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void qrcodeScanner(View view){
+        Intent intent = new Intent(this, QRCodeScannerActivity.class);
+        startActivity(intent);
+    }
+
     private String getServer(){
-        return "http://" + this.serverEditText.getText().toString();
+        return this.serverEditText.getText().toString();
     }
 
     private Led getLed() {
