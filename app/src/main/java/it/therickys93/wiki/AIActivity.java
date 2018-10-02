@@ -125,6 +125,15 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
                 // non fare nulla
             }
         });
+        dialogBuilder.setNeutralButton("Qr Code", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(AIActivity.this, QRCodeScannerActivity.class);
+                intent.putExtra("SETTINGS", "MySettingsWikiAI");
+                intent.putExtra("URL", "WIKISERVER_URL");
+                startActivity(intent);
+            }
+        });
         AlertDialog b = dialogBuilder.create();
         b.show();
     }

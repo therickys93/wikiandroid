@@ -62,9 +62,9 @@ public class QRCodeScannerActivity extends AppCompatActivity {
                         Vibrator vb = (Vibrator)   getSystemService(Context.VIBRATOR_SERVICE);
                         vb.vibrate(100);
                         Toast.makeText(QRCodeScannerActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
-                        SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
+                        SharedPreferences settings = getSharedPreferences(getIntent().getStringExtra("SETTINGS"), 0);
                         SharedPreferences.Editor editor = settings.edit();
-                        editor.putString("WIKI_SERVER", result.getText());
+                        editor.putString(getIntent().getStringExtra("URL"), result.getText());
                         editor.commit();
                         finish();
                     }

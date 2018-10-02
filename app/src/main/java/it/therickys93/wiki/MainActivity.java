@@ -141,6 +141,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void qrcodeScanner(View view){
         Intent intent = new Intent(this, QRCodeScannerActivity.class);
+        intent.putExtra("SETTINGS", "MySettingsWiki");
+        intent.putExtra("URL", "WIKI_SERVER");
         startActivity(intent);
     }
 
