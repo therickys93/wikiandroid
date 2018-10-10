@@ -29,7 +29,7 @@ deploy:
   api_key:
     secure: lJnfVMlP/83zWQpHjqgf6xplAaaD9VFY3hd101+hxdOqVvVdm0gM2FC+PJHILn00rl9Q5sASyddI/rNQXdrOrY3HNC4AzelnZ+6MmXvu+xYdIbmXD2qVFep+mteHUcbyHoMesRnEotLTDgTZRoiIub+nC/cxp8DKvBOYI1vwYy7hvbl1W059yjWGPS0k/C2C+9IoktYDo6uFhgY+dzMfONWjIrATJlYF5dGH7m+VCsPs/kaoUR43qUi/FtfHWOgvh+AOnswCcrbQ76/tTCb7kIxHTPZw9hHpxNG0iW9KS0X/I5kqINit5feWu+j9EH/bOibjs4voKoxkVcCDiAO3cLOE3eLL7NgaShPxkPnwJQQeyRjtP/YBaxMjyRjx7rgXGH6i0yu+AKxZJFznGkE7HpzxMq5WTjKL0dNIVw2GtBnkJ2OIeQ5hRHyg1vghbeBPICiGi19yIv/mimqC4MCV7kOohnu0/PQy8mjOQi74AI2S2y+rgmk9egS4sW49XISd2SGbq7ec091D+xDJQZ4mCJXmNqXoN2LUPocdBAPHd3gsgE55oRCFiFfthBXXRRhfRVidvoHrn62O6xoHRMAfBpy5Gy87udzmOEmI4QWrHxlM53IWBLFzrNSqi+OWwbwoidYikAy9TQAjuppNcLnRC9KeIFMgeY+9KpbmDpcWykc=
   file_glob: "true"
-  file: app/build/outputs/apk/release/app*release*.apk
+  file: app/build/outputs/apk/release/Wiki*.apk
   skip_cleanup: true
   on:
     branch: master
