@@ -57,7 +57,7 @@ public class LedListAdapter extends BaseAdapter {
         TextView key = (TextView)vi.findViewById(R.id.ledkey);
         TextView pos = (TextView)vi.findViewById(R.id.ledposition);
         if(leds == null || leds.size() == 0){
-            name.setText("Nessun led trovato");
+            name.setText("Nessun accessorio trovato");
             key.setText("");
             pos.setText("");
         } else {

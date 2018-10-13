@@ -44,7 +44,7 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
     }
 
     public void save(View view){
-        HouseUtils.saveHouseToFile(MainActivity.getAppContext(), MainActivity.WIKI_FILENAME, MainActivity.house);
+        HouseUtils.saveHouseToFile(MainActivity.getAppContext(), Wiki.Controller.DEFAULT_FILENAME, MainActivity.house);
         Toast.makeText(MainActivity.getAppContext(), "Salvato", Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -63,7 +63,7 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
         final EditText ledkey  = (EditText) dialogView.findViewById(R.id.editledkey);
         final Spinner  ledPosition = (Spinner) dialogView.findViewById(R.id.spinnerlights);
 
-        dialogBuilder.setTitle("Nuovo Led");
+        dialogBuilder.setTitle("Nuovo Accessorio");
         dialogBuilder.setPositiveButton("Fatto", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String name = ledname.getText().toString();
@@ -128,9 +128,9 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
-                SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
-                String server = settings.getString("WIKI_SERVER", MainActivity.SERVER);
-                WikiController request = new WikiController("http://" + server);
+                SharedPreferences settings = getSharedPreferences(Wiki.Controller.Settings.NAME, 0);
+                String server = settings.getString(Wiki.Controller.Settings.SERVER, Wiki.Controller.DEFAULT_URL);
+                WikiController request = new WikiController(server);
                 String response = request.execute(new Upload(MainActivity.house));
                 Response res = Response.parseSuccess(response);
                 return res.ok();
@@ -143,9 +143,9 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if(aBoolean){
-                Toast.makeText(HouseConfigurationActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HouseConfigurationActivity.this, Wiki.Controller.Response.OK, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(HouseConfigurationActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HouseConfigurationActivity.this, Wiki.Controller.Response.ERROR, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -155,9 +155,9 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
         @Override
         protected House doInBackground(Void... voids) {
             try {
-                SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
-                String server = settings.getString("WIKI_SERVER", MainActivity.SERVER);
-                WikiController request = new WikiController("http://" + server);
+                SharedPreferences settings = getSharedPreferences(Wiki.Controller.Settings.NAME, 0);
+                String server = settings.getString(Wiki.Controller.Settings.SERVER, Wiki.Controller.DEFAULT_URL);
+                WikiController request = new WikiController(server);
                 String response = request.execute(new Download());
                 return House.fromJson(response);
             } catch (Exception e){
@@ -169,11 +169,11 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
         protected void onPostExecute(House house) {
             super.onPostExecute(house);
             if(house == null){
-                Toast.makeText(HouseConfigurationActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HouseConfigurationActivity.this, Wiki.Controller.Response.ERROR, Toast.LENGTH_SHORT).show();
             } else {
                 MainActivity.house = house;
                 updateUI();
-                Toast.makeText(HouseConfigurationActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HouseConfigurationActivity.this, Wiki.Controller.Response.OK, Toast.LENGTH_SHORT).show();
             }
         }
     }
