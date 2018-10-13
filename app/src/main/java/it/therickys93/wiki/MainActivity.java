@@ -28,9 +28,6 @@ import it.therickys93.wikiapi.model.Led;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String SERVER = "192.168.15.12";
-    public static final String WIKI_FILENAME = "wiki.json";
-
     private EditText serverEditText;
     private Spinner  lightSpinner;
     private TextView versionTextView;
@@ -53,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         lightSpinner = (Spinner) findViewById(R.id.spinner_light);
         versionTextView = (TextView) findViewById(R.id.version_label);
 
-        MainActivity.house = HouseUtils.loadHouseFromFile(MainActivity.getAppContext(), WIKI_FILENAME);
+        MainActivity.house = HouseUtils.loadHouseFromFile(MainActivity.getAppContext(), Wiki.Controller.DEFAULT_FILENAME);
 
         populateServer();
 
@@ -64,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
                     InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     in.hideSoftInputFromWindow(serverEditText.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
                     // save the new value
-                    SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
+                    SharedPreferences settings = getSharedPreferences(Wiki.Controller.Settings.NAME, 0);
                     SharedPreferences.Editor editor = settings.edit();
-                    editor.putString("WIKI_SERVER", serverEditText.getText().toString());
+                    editor.putString(Wiki.Controller.Settings.SERVER, serverEditText.getText().toString());
                     editor.commit();
                 }
                 return false;
@@ -92,14 +89,14 @@ public class MainActivity extends AppCompatActivity {
                 names.add(l.getName());
             }
         } else {
-            names.add("Nessun Led trovato");
+            names.add("Nessun Accessorio trovato");
         }
         return names;
     }
 
     private void populateServer(){
-        SharedPreferences settings = getSharedPreferences("MySettingsWiki", 0);
-        String server = settings.getString("WIKI_SERVER", SERVER);
+        SharedPreferences settings = getSharedPreferences(Wiki.Controller.Settings.NAME, 0);
+        String server = settings.getString(Wiki.Controller.Settings.SERVER, Wiki.Controller.DEFAULT_URL);
         serverEditText.setText(server);
     }
 
@@ -141,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void qrcodeScanner(View view){
         Intent intent = new Intent(this, QRCodeScannerActivity.class);
-        intent.putExtra("SETTINGS", "MySettingsWiki");
-        intent.putExtra("URL", "WIKI_SERVER");
+        intent.putExtra(Wiki.QRCode.SETTINGS, Wiki.Controller.Settings.NAME);
+        intent.putExtra(Wiki.QRCode.URL, Wiki.Controller.Settings.SERVER);
         startActivity(intent);
     }
 
@@ -200,9 +197,9 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if(aBoolean){
-                Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, Wiki.Controller.Response.OK, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(MainActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, Wiki.Controller.Response.ERROR, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -225,9 +222,9 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if(aBoolean){
-                Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, Wiki.Controller.Response.OK, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(MainActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, Wiki.Controller.Response.ERROR, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -251,9 +248,9 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if(aBoolean){
-                Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, Wiki.Controller.Response.OK, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(MainActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, Wiki.Controller.Response.ERROR, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -277,9 +274,9 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if(aBoolean){
-                Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, Wiki.Controller.Response.OK, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(MainActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, Wiki.Controller.Response.ERROR, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -302,16 +299,16 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Response status) {
             super.onPostExecute(status);
             if (status == null) {
-                Toast.makeText(MainActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, Wiki.Controller.Response.ERROR, Toast.LENGTH_SHORT).show();
             } else {
                 if (status.ok()) {
                     if (status.message().charAt(lightSpinner.getSelectedItemPosition()) == '1') {
-                        Toast.makeText(MainActivity.this, "ACCESO", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, Wiki.Controller.Response.ON, Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(MainActivity.this, "SPENTO", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, Wiki.Controller.Response.OFF, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(MainActivity.this, "ERRORE", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, Wiki.Controller.Response.ERROR, Toast.LENGTH_SHORT).show();
                 }
             }
         }

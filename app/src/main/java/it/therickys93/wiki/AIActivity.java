@@ -70,7 +70,7 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.ai_menu, menu);
         return true;
     }
 
@@ -82,10 +82,6 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
                 intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 finish();
-                return true;
-            case R.id.house:
-                intent = new Intent(this, HouseConfigurationActivity.class);
-                startActivity(intent);
                 return true;
             case R.id.ai:
                 intent = new Intent(this, AIActivity.class);
@@ -105,8 +101,8 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
         dialogBuilder.setView(dialogView);
 
         final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
-        SharedPreferences settings = getSharedPreferences("MySettingsWikiAI", 0);
-        String url = settings.getString("WIKISERVER_URL", "http://192.168.15.13:8080/v1/wiki");
+        SharedPreferences settings = getSharedPreferences(Wiki.AI.Settings.NAME, 0);
+        String url = settings.getString(Wiki.AI.Settings.SERVER, Wiki.AI.DEFAULT_URL);
 
         edt.setText(url);
 
@@ -114,9 +110,9 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
         dialogBuilder.setMessage("Wiki Server URL");
         dialogBuilder.setPositiveButton("Fatto", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                SharedPreferences settings = getSharedPreferences("MySettingsWikiAI", 0);
+                SharedPreferences settings = getSharedPreferences(Wiki.AI.Settings.NAME, 0);
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putString("WIKISERVER_URL", edt.getText().toString());
+                editor.putString(Wiki.AI.Settings.SERVER, edt.getText().toString());
                 editor.commit();
             }
         });
@@ -129,8 +125,8 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent(AIActivity.this, QRCodeScannerActivity.class);
-                intent.putExtra("SETTINGS", "MySettingsWikiAI");
-                intent.putExtra("URL", "WIKISERVER_URL");
+                intent.putExtra(Wiki.QRCode.SETTINGS, Wiki.AI.Settings.NAME);
+                intent.putExtra(Wiki.QRCode.URL, Wiki.AI.Settings.SERVER);
                 startActivity(intent);
             }
         });
@@ -192,8 +188,8 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("request", message);
 
-        SharedPreferences settings = getSharedPreferences("MySettingsWikiAI", 0);
-        String url = settings.getString("WIKISERVER_URL", "http://192.168.15.13:8080/v1/wiki");
+        SharedPreferences settings = getSharedPreferences(Wiki.AI.Settings.NAME, 0);
+        String url = settings.getString(Wiki.AI.Settings.SERVER, Wiki.AI.DEFAULT_URL);
 
         JsonObjectRequest req = new JsonObjectRequest(url, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
