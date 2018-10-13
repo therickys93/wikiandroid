@@ -70,7 +70,7 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.ai_menu, menu);
         return true;
     }
 
@@ -82,10 +82,6 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
                 intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 finish();
-                return true;
-            case R.id.house:
-                intent = new Intent(this, HouseConfigurationActivity.class);
-                startActivity(intent);
                 return true;
             case R.id.ai:
                 intent = new Intent(this, AIActivity.class);
