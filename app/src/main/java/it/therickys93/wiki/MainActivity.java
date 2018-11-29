@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 names.add(l.getName());
             }
         } else {
+            FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "No leds found");
             names.add("Nessun Accessorio trovato");
         }
         return names;
@@ -197,8 +198,10 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if(aBoolean){
+                FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Switch on led: OK");
                 Toast.makeText(MainActivity.this, Wiki.Controller.Response.OK, Toast.LENGTH_SHORT).show();
             } else {
+                FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Switch on led: ERRORE");
                 Toast.makeText(MainActivity.this, Wiki.Controller.Response.ERROR, Toast.LENGTH_SHORT).show();
             }
         }
@@ -222,8 +225,10 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if(aBoolean){
+                FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Switch off led: OK");
                 Toast.makeText(MainActivity.this, Wiki.Controller.Response.OK, Toast.LENGTH_SHORT).show();
             } else {
+                FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Switch on led: ERRORE");
                 Toast.makeText(MainActivity.this, Wiki.Controller.Response.ERROR, Toast.LENGTH_SHORT).show();
             }
         }
@@ -248,8 +253,10 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if(aBoolean){
+                FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Open led: OK");
                 Toast.makeText(MainActivity.this, Wiki.Controller.Response.OK, Toast.LENGTH_SHORT).show();
             } else {
+                FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Open led: ERRORE");
                 Toast.makeText(MainActivity.this, Wiki.Controller.Response.ERROR, Toast.LENGTH_SHORT).show();
             }
         }
@@ -274,8 +281,10 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if(aBoolean){
+                FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Reset key: OK");
                 Toast.makeText(MainActivity.this, Wiki.Controller.Response.OK, Toast.LENGTH_SHORT).show();
             } else {
+                FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Reset key: ERRORE");
                 Toast.makeText(MainActivity.this, Wiki.Controller.Response.ERROR, Toast.LENGTH_SHORT).show();
             }
         }
@@ -299,15 +308,19 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Response status) {
             super.onPostExecute(status);
             if (status == null) {
+                FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Status led: ERRORE");
                 Toast.makeText(MainActivity.this, Wiki.Controller.Response.ERROR, Toast.LENGTH_SHORT).show();
             } else {
                 if (status.ok()) {
                     if (status.message().charAt(lightSpinner.getSelectedItemPosition()) == '1') {
+                        FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Status led: ACCESO");
                         Toast.makeText(MainActivity.this, Wiki.Controller.Response.ON, Toast.LENGTH_SHORT).show();
                     } else {
+                        FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Status led: SPENTO");
                         Toast.makeText(MainActivity.this, Wiki.Controller.Response.OFF, Toast.LENGTH_SHORT).show();
                     }
                 } else {
+                    FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Status led: ERRORE");
                     Toast.makeText(MainActivity.this, Wiki.Controller.Response.ERROR, Toast.LENGTH_SHORT).show();
                 }
             }

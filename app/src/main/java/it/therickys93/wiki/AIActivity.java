@@ -160,6 +160,7 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     String request = result.get(0);
+                    FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "WIKIAI Request: " + request);
                     showMessageInEditText(inputMessageTypeWriter, request);
                     performRequest(result.get(0));
 
@@ -180,6 +181,7 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
     {
         outputMessageTypeWriter.setCharacterDelay(50);
         outputMessageTypeWriter.animateText(message);
+        FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "WIKIAI Response: " + message);
         speakOut(message);
     }
 
@@ -190,6 +192,7 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
 
         SharedPreferences settings = getSharedPreferences(Wiki.AI.Settings.NAME, 0);
         String url = settings.getString(Wiki.AI.Settings.SERVER, Wiki.AI.DEFAULT_URL);
+        FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Wiki Server URL: "+ url);
 
         JsonObjectRequest req = new JsonObjectRequest(url, new JSONObject(params),
                 new Response.Listener<JSONObject>() {

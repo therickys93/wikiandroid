@@ -23,6 +23,8 @@ import com.budiyev.android.codescanner.DecodeCallback;
 import com.budiyev.android.codescanner.ErrorCallback;
 import com.google.zxing.Result;
 
+import java.io.File;
+
 public class QRCodeScannerActivity extends AppCompatActivity {
 
     private CodeScanner mCodeScanner;
@@ -62,10 +64,12 @@ public class QRCodeScannerActivity extends AppCompatActivity {
                         Vibrator vb = (Vibrator)   getSystemService(Context.VIBRATOR_SERVICE);
                         vb.vibrate(100);
                         Toast.makeText(QRCodeScannerActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
+                        FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "QR Code Results: " + result.getText());
                         SharedPreferences settings = getSharedPreferences(getIntent().getStringExtra(Wiki.QRCode.SETTINGS), 0);
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putString(getIntent().getStringExtra(Wiki.QRCode.URL), result.getText());
                         editor.commit();
+                        FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "New Wiki Controller URL: " + result.getText());
                         finish();
                     }
                 });

@@ -8,6 +8,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Ricky on 1/29/18.
@@ -55,6 +57,13 @@ public class FileUtils {
     public static boolean saveToFile(Context context, String filename, String content)
     {
         return saveToFile(context, filename, content, false);
+    }
+
+    public static boolean appendToFile(Context context, String filename, String content)
+    {
+        String timeStamp = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new Date());
+        String toBeSaved = "[" + timeStamp + "] " + content + System.lineSeparator();
+        return saveToFile(context, filename, toBeSaved, true);
     }
 
     private static boolean saveToFile(Context context, String fileName, String content, boolean appending){
