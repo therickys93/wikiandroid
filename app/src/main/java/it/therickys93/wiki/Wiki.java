@@ -19,6 +19,7 @@ public class Wiki {
     public class Controller {
         public static final String DEFAULT_URL      = "http://controller.wiki.home";
         public static final String DEFAULT_FILENAME = "wiki.json";
+        public static final String LOG_FILENAME     = "Wiki_Android_log.txt";
         public class Settings {
             public static final String NAME   = "MySettingsWiki";
             public static final String SERVER = "WIKI_SERVER";
