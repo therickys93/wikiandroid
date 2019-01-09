@@ -103,8 +103,11 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
         final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
         SharedPreferences settings = getSharedPreferences(Wiki.AI.Settings.NAME, 0);
         String url = settings.getString(Wiki.AI.Settings.SERVER, Wiki.AI.DEFAULT_URL);
-
         edt.setText(url);
+
+        final EditText edt1 = (EditText) dialogView.findViewById(R.id.edit2);
+        String user_id = settings.getString(Wiki.AI.Settings.USER_ID, Wiki.AI.DEFAULT_USERID);
+        edt1.setText(user_id);
 
         dialogBuilder.setTitle("Wiki Server");
         dialogBuilder.setMessage("Wiki Server URL");
@@ -113,6 +116,7 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
                 SharedPreferences settings = getSharedPreferences(Wiki.AI.Settings.NAME, 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString(Wiki.AI.Settings.SERVER, edt.getText().toString());
+                editor.putString(Wiki.AI.Settings.USER_ID, edt1.getText().toString());
                 editor.commit();
             }
         });
@@ -160,7 +164,7 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     String request = result.get(0);
-                    FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "WIKIAI Request: " + request);
+                    // FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "WIKIAI Request: " + request);
                     showMessageInEditText(inputMessageTypeWriter, request);
                     performRequest(result.get(0));
 
@@ -181,7 +185,7 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
     {
         outputMessageTypeWriter.setCharacterDelay(50);
         outputMessageTypeWriter.animateText(message);
-        FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "WIKIAI Response: " + message);
+        // FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "WIKIAI Response: " + message);
         speakOut(message);
     }
 
@@ -192,7 +196,12 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
 
         SharedPreferences settings = getSharedPreferences(Wiki.AI.Settings.NAME, 0);
         String url = settings.getString(Wiki.AI.Settings.SERVER, Wiki.AI.DEFAULT_URL);
-        FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Wiki Server URL: "+ url);
+        // FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Wiki Server URL: "+ url);
+
+        String user_id = settings.getString(Wiki.AI.Settings.USER_ID, Wiki.AI.DEFAULT_USERID);
+        // FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Wiki Server USERID: "+ user_id);
+
+        params.put("user_id", user_id);
 
         JsonObjectRequest req = new JsonObjectRequest(url, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
@@ -209,7 +218,7 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
             @Override
             public void onErrorResponse(VolleyError error) {
                 String errMsg = error.getMessage();
-                if(errMsg != null) {
+                if (errMsg != null) {
                     VolleyLog.v("Error: %s", error.getMessage());
                     Log.v("WIKI", error.getMessage());
                 }

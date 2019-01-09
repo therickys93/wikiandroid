@@ -10,10 +10,12 @@ public class Wiki {
         public static final String URL      = "URL";
     }
     public class AI {
-        public static final String DEFAULT_URL = "http://server.wiki.home/v1/wiki";
+        public static final String DEFAULT_URL    = "http://server.wiki.home/v1/wiki";
+        public static final String DEFAULT_USERID = "therickys93";
         public class Settings {
             public static final String NAME   = "MySettingsWikiAI";
             public static final String SERVER = "WIKISERVER_URL";
+            public static final String USER_ID = "WIKISERVER_USERID";
         }
     }
     public class Controller {
