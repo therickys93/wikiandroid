@@ -39,12 +39,16 @@ public class MainActivity extends AppCompatActivity {
         return MainActivity.context;
     }
 
+    public static void createAppContext(Context context) {
+        MainActivity.context = context;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MainActivity.context = getApplicationContext();
+        MainActivity.createAppContext(getAppContext());
 
         serverEditText = (EditText) findViewById(R.id.server_edit_text);
         lightSpinner = (Spinner) findViewById(R.id.spinner_light);
