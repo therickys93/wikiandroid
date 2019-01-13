@@ -63,7 +63,7 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
         button.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                showDialog();
+                showDialogSettings();
                 return true;
             }
         });
@@ -85,6 +85,9 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
                 startActivity(intent);
                 finish();
                 return true;
+            case R.id.writeToWikiServer:
+                showDialogInputRequest();
+                return true;
             case R.id.ai:
                 intent = new Intent(this, AIActivity.class);
                 startActivity(intent);
@@ -95,7 +98,35 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
         }
     }
 
-    private void showDialog()
+    private void showDialogInputRequest()
+    {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.input_request_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
+        edt.setHint("Scrivi qui");
+
+        dialogBuilder.setTitle("Richiesta WikiServer");
+        dialogBuilder.setMessage("Scrivi la tua richiesta");
+        dialogBuilder.setPositiveButton("Invia", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String request = edt.getText().toString();
+                showMessageInEditText(inputMessageTypeWriter, request);
+                performRequest(request);
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancella", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // non fare nulla
+            }
+        });
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+    }
+
+    private void showDialogSettings()
     {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
