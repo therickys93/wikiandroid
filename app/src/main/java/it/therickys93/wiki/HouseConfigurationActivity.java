@@ -20,6 +20,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import it.therickys93.wikiapi.controller.Download;
+import it.therickys93.wikiapi.controller.Init;
 import it.therickys93.wikiapi.controller.Response;
 import it.therickys93.wikiapi.controller.Upload;
 import it.therickys93.wikiapi.controller.WikiController;
@@ -70,6 +71,7 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
                 String key = ledkey.getText().toString();
                 int position = ledPosition.getSelectedItemPosition();
                 MainActivity.house.addLed(new Led(name, key, position));
+                new InitButtonAsyncTask().execute(key);
                 // reload the new list
                 updateUI();
             }
@@ -120,6 +122,33 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private class InitButtonAsyncTask extends AsyncTask<String, Void, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(String... key) {
+            try {
+                SharedPreferences settings = getSharedPreferences(Wiki.Controller.Settings.NAME, 0);
+                String server = settings.getString(Wiki.Controller.Settings.SERVER, Wiki.Controller.DEFAULT_URL);
+                WikiController wikiController = new WikiController(server);
+                String response = wikiController.execute(new Init(key[0]));
+                Response status = Response.parseSuccess(response);
+                return status.ok();
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(aBoolean){
+                FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Init key: OK");
+            } else {
+                FileUtils.appendToFile(MainActivity.getAppContext(), Wiki.Controller.LOG_FILENAME, "Init key: ERRORE");
+            }
         }
     }
 
