@@ -1,5 +1,6 @@
 package it.therickys93.wiki;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,11 +163,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onButtonClicked(View view){
-        new OnButtonAsyncTask().execute(getLed());
+        // new OnButtonAsyncTask().execute(getLed());
+
+        List<Sendable> list = new ArrayList<>();
+        list.add(new On("prova", 2));
+        list.add(new On("prova", 4));
+        list.add(new On("prova", 5));
+        list.add(new On("prova", 6));
+        list.add(new On("prova", 7));
+        list.add(new On("prova", 3));
+        list.add(new On("prova", 1));
+
+        new ExecuteAsyncTask().execute(list);
+
     }
 
     public void offButtonClicked(View view){
-        new OffButtonAsyncTask().execute(getLed());
+        // new OffButtonAsyncTask().execute(getLed());
+
+        List<Sendable> list = new ArrayList<>();
+        list.add(new Off("prova", 2));
+        list.add(new Off("prova", 4));
+        list.add(new Off("prova", 5));
+        list.add(new Off("prova", 6));
+        list.add(new Off("prova", 7));
+        list.add(new Off("prova", 3));
+        list.add(new Off("prova", 1));
+
+        new ExecuteAsyncTask().execute(list);
+
     }
 
     public void openButtonClicked(View view){
@@ -182,6 +208,48 @@ public class MainActivity extends AppCompatActivity {
 
     public void resetButtonClicked(View view){
         new ResetButtonAsyncTask().execute(getLed());
+    }
+
+
+    private class ExecuteAsyncTask extends AsyncTask<List<Sendable>, Void, Boolean>{
+
+        public ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(MainActivity.this);
+            dialog.setMessage("macro...");
+            dialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(List<Sendable>[] lists) {
+            List<Sendable> pippo = lists[0];
+            WikiController wikiController = new WikiController(getServer());
+            try {
+                for (int i = 0; i < pippo.size(); i++) {
+                    wikiController.execute(pippo.get(i));
+                    Thread.sleep(1000);
+                }
+                return true;
+            } catch (Exception e){
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(dialog.isShowing()){
+                dialog.dismiss();
+            }
+            if(aBoolean){
+                Toast.makeText(MainActivity.this, Wiki.Controller.Response.OK, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivity.this, Wiki.Controller.Response.ERROR, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private class OnButtonAsyncTask extends AsyncTask<Led, Void, Boolean>{
