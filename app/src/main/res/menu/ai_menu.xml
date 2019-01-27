@@ -14,4 +14,7 @@
     <item android:id="@+id/ai"
         android:title="Wiki AI" />
 
+    <item android:id="@+id/macro"
+        android:title="Macro" />
+
 </menu>

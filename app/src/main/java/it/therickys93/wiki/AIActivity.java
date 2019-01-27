@@ -93,6 +93,11 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
                 startActivity(intent);
                 finish();
                 return true;
+            case R.id.macro:
+                intent = new Intent(this, MacroActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
