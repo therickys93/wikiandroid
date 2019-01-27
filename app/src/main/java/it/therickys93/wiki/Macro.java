@@ -25,4 +25,5 @@ public class Macro
     public List<Sendable> getSendable(){
         return this.sendable;
     }
+
 }
