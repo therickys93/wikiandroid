@@ -22,6 +22,7 @@ import it.therickys93.wikiapi.controller.Off;
 import it.therickys93.wikiapi.controller.On;
 import it.therickys93.wikiapi.controller.Sendable;
 import it.therickys93.wikiapi.controller.WikiController;
+import it.therickys93.wikiapi.model.Led;
 
 public class MacroActivity extends AppCompatActivity implements AdapterView.OnItemLongClickListener {
 
@@ -39,29 +40,30 @@ public class MacroActivity extends AppCompatActivity implements AdapterView.OnIt
         this.listView.setOnItemLongClickListener(this);
 
         List<Sendable> list = new ArrayList<>();
-        list.add(new On("prova", 2));
-        list.add(new On("prova", 4));
-        list.add(new On("prova", 5));
-        list.add(new On("prova", 6));
-        list.add(new On("prova", 7));
-        list.add(new On("prova", 3));
-        list.add(new On("prova", 1));
-        list.add(new On("prova", 0));
+        list.add(new On(new Led("luce gialla", "prova", 0)));
+        list.add(new On(new Led("luce verde", "prova", 1)));
+        list.add(new On(new Led("luce rossa", "prova", 2)));
+        list.add(new On(new Led("luce blu", "prova", 3)));
+        list.add(new On(new Led("luce bianca", "prova", 4)));
+        list.add(new On(new Led("luce rosa", "prova", 5)));
+        list.add(new On(new Led("luce nera", "prova", 6)));
+        list.add(new On(new Led("luce marrone", "prova", 7)));
         macros.add(new Macro("Accendi tutto", list));
 
         List<Sendable> list1 = new ArrayList<>();
-        list1.add(new Off("prova", 2));
-        list1.add(new Off("prova", 4));
-        list1.add(new Off("prova", 5));
-        list1.add(new Off("prova", 6));
-        list1.add(new Off("prova", 7));
-        list1.add(new Off("prova", 3));
-        list1.add(new Off("prova", 1));
-        list1.add(new Off("prova", 0));
+        list1.add(new Off(new Led("luce gialla", "prova", 0)));
+        list1.add(new Off(new Led("luce verde", "prova", 1)));
+        list1.add(new Off(new Led("luce rossa", "prova", 2)));
+        list1.add(new Off(new Led("luce blu", "prova", 3)));
+        list1.add(new Off(new Led("luce bianca", "prova", 4)));
+        list1.add(new Off(new Led("luce rosa", "prova", 5)));
+        list1.add(new Off(new Led("luce nera", "prova", 6)));
+        list1.add(new Off(new Led("luce marrone", "prova", 7)));
         macros.add(new Macro("Spegni tutto", list1));
 
         this.listAdapter = new MacroListAdapter(MacroActivity.this, macros);
         this.listView.setAdapter(this.listAdapter);
+        MacroUtils.saveMacrosToFile(MainActivity.getAppContext(), Wiki.Controller.MACRO_FILENAME, macros);
     }
 
     @Override

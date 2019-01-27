@@ -2,6 +2,8 @@ package it.therickys93.wiki;
 
 import android.content.Context;
 
+import com.google.gson.JsonArray;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +14,11 @@ import java.util.List;
 public class MacroUtils {
 
     public static boolean saveMacrosToFile(Context context, String filename, List<Macro> macroList){
-        // TODO: da implementare
-        String toBeSaved = "[]";
-        return FileUtils.saveToFile(context, filename, toBeSaved);
+        JsonArray list = new JsonArray();
+        for(int i = 0; i< macroList.size(); i++){
+            list.add(macroList.get(i).toJson());
+        }
+        return FileUtils.saveToFile(context, filename, list.toString());
     }
 
     public static List<Macro> loadMacrosFromFile(Context context, String filename){
