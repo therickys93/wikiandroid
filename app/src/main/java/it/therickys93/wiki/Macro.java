@@ -3,6 +3,7 @@ package it.therickys93.wiki;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.therickys93.wikiapi.controller.Sendable;
@@ -18,7 +19,7 @@ public class Macro
 
     public Macro(String name, List<Sendable> sendable){
         this.name = name;
-        this.sendable = sendable;
+        this.sendable = new ArrayList<>(sendable);
     }
 
     public String getName() {

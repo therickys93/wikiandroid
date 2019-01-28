@@ -39,28 +39,7 @@ public class MacroActivity extends AppCompatActivity implements AdapterView.OnIt
         this.listView = (ListView) findViewById(R.id.listmacro);
         this.listView.setOnItemLongClickListener(this);
 
-        List<Sendable> list = new ArrayList<>();
-        list.add(new On(new Led("luce gialla", "prova", 0)));
-        list.add(new On(new Led("luce verde", "prova", 1)));
-        list.add(new On(new Led("luce rossa", "prova", 2)));
-        list.add(new On(new Led("luce blu", "prova", 3)));
-        list.add(new On(new Led("luce bianca", "prova", 4)));
-        list.add(new On(new Led("luce rosa", "prova", 5)));
-        list.add(new On(new Led("luce nera", "prova", 6)));
-        list.add(new On(new Led("luce marrone", "prova", 7)));
-        macros.add(new Macro("Accendi tutto", list));
-
-        List<Sendable> list1 = new ArrayList<>();
-        list1.add(new Off(new Led("luce gialla", "prova", 0)));
-        list1.add(new Off(new Led("luce verde", "prova", 1)));
-        list1.add(new Off(new Led("luce rossa", "prova", 2)));
-        list1.add(new Off(new Led("luce blu", "prova", 3)));
-        list1.add(new Off(new Led("luce bianca", "prova", 4)));
-        list1.add(new Off(new Led("luce rosa", "prova", 5)));
-        list1.add(new Off(new Led("luce nera", "prova", 6)));
-        list1.add(new Off(new Led("luce marrone", "prova", 7)));
-        macros.add(new Macro("Spegni tutto", list1));
-
+        this.macros = MacroUtils.loadMacrosFromFile(MainActivity.getAppContext(), Wiki.Controller.MACRO_FILENAME);
         this.listAdapter = new MacroListAdapter(MacroActivity.this, macros);
         this.listView.setAdapter(this.listAdapter);
         MacroUtils.saveMacrosToFile(MainActivity.getAppContext(), Wiki.Controller.MACRO_FILENAME, macros);
