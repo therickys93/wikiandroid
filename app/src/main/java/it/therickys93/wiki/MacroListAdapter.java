@@ -28,7 +28,7 @@ public class MacroListAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         if(macros == null || macros.size() == 0){
-            return 0;
+            return 1;
         }
         return macros.size();
     }
