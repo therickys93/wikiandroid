@@ -52,7 +52,7 @@ public class MacroActivity extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int index, long l) {
-        if(macros != null){
+        if(macros != null && macros.size() > 0){
             this.macros.remove(index);
             this.listAdapter.updateMacros(this.macros);
             MacroUtils.saveMacrosToFile(MainActivity.getAppContext(), Wiki.Controller.MACRO_FILENAME, this.macros);
@@ -117,7 +117,7 @@ public class MacroActivity extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        if(macros != null){
+        if(macros != null && macros.size() > 0){
             Macro macro = this.macros.get(i);
             new ExecuteAsyncTask().execute(macro.getSendable());
         }
