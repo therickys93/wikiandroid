@@ -11,7 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -41,11 +40,6 @@ public class MacroActivity extends AppCompatActivity implements AdapterView.OnIt
         this.listView.setOnItemClickListener(this);
 
         this.macros = MacroUtils.loadMacrosFromFile(MainActivity.getAppContext(), Wiki.Controller.MACRO_FILENAME);
-        this.listAdapter = new MacroListAdapter(MacroActivity.this, macros);
-        this.listView.setAdapter(this.listAdapter);
-    }
-
-    private void updateUI() {
         this.listAdapter = new MacroListAdapter(MacroActivity.this, macros);
         this.listView.setAdapter(this.listAdapter);
     }
