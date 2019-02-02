@@ -23,7 +23,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".QRCodeScannerActivity" />
-        <activity android:name=".MacroActivity"></activity>
+        <activity android:name=".MacroActivity" />
+        <activity android:name=".EditMacroActivity"></activity>
     </application>
 
 </manifest>
