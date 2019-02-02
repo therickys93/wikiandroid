@@ -112,12 +112,17 @@ public class MacroActivity extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if(macros != null && macros.size() > 0){
-            Macro macro = this.macros.get(i);
-            new ExecuteAsyncTask().execute(macro.getSendable());
+            // update macro
         }
     }
 
-    private class ExecuteAsyncTask extends AsyncTask<List<Sendable>, Void, Boolean> {
+    public void runMacro(View view){
+        int id = (int)view.getTag();
+        Macro macro = this.macros.get(id);
+        new ExecuteAsyncTask().execute(macro.getSendable());
+    }
+
+    public class ExecuteAsyncTask extends AsyncTask<List<Sendable>, Void, Boolean> {
 
         public ProgressDialog dialog;
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -55,11 +56,15 @@ public class MacroListAdapter extends BaseAdapter {
             vi = this.inflater.inflate(R.layout.macro_list, null);
         }
         TextView name = (TextView)vi.findViewById(R.id.macroname);
+        Button button = (Button)vi.findViewById(R.id.macrobutton);
         if(macros == null || macros.size() == 0){
             name.setText("Nessuna macro trovata");
+            button.setVisibility(View.GONE);
         } else {
             Macro macro = macros.get(i);
             name.setText(macro.getName());
+            button.setVisibility(View.VISIBLE);
+            button.setTag(i);
         }
         return vi;
     }
