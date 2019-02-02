@@ -5,15 +5,21 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import it.therickys93.wikiapi.controller.Sendable;
 
 public class EditMacroActivity extends AppCompatActivity {
 
     private List<Macro> macros;
     private Macro macro;
     private EditText editText;
+    private ListView listView;
     private int index;
 
     @Override
@@ -21,6 +27,7 @@ public class EditMacroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_macro);
         editText = (EditText)findViewById(R.id.edit_macro_name);
+        listView = (ListView)findViewById(R.id.macro_sendable);
 
         this.macros = MacroUtils.loadMacrosFromFile(MainActivity.getAppContext(), Wiki.Controller.MACRO_FILENAME);
         Bundle b = getIntent().getExtras();
@@ -34,6 +41,13 @@ public class EditMacroActivity extends AppCompatActivity {
 
     private void updateUI(){
         editText.setText(this.macro.getName());
+        List<String> list = new ArrayList<>();
+        List<Sendable> sendables = this.macro.getSendable();
+        for(int i = 0; i < sendables.size(); i++){
+            list.add(sendables.get(i).getType() + " " + sendables.get(i).getLed().getName());
+        }
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
+        listView.setAdapter(arrayAdapter);
     }
 
     @Override
