@@ -39,6 +39,11 @@ public class MacroActivity extends AppCompatActivity implements AdapterView.OnIt
         this.listView.setOnItemLongClickListener(this);
         this.listView.setOnItemClickListener(this);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         this.macros = MacroUtils.loadMacrosFromFile(MainActivity.getAppContext(), Wiki.Controller.MACRO_FILENAME);
         this.listAdapter = new MacroListAdapter(MacroActivity.this, macros);
         this.listView.setAdapter(this.listAdapter);
@@ -112,7 +117,9 @@ public class MacroActivity extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if(macros != null && macros.size() > 0){
-            // update macro
+            Intent intent = new Intent(this, EditMacroActivity.class);
+            intent.putExtra("id", i);
+            startActivity(intent);
         }
     }
 
