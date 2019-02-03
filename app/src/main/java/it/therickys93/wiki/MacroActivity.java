@@ -61,19 +61,8 @@ public class MacroActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void addMacro() {
-        List<Sendable> sendable = new ArrayList<>();
-        sendable.add(new On(new Led("pippo", "prova", 0)));
-        sendable.add(new Off(new Led("pippo", "prova", 1)));
-        sendable.add(new On(new Led("pippo", "prova", 2)));
-        sendable.add(new Off(new Led("pippo", "prova", 3)));
-        sendable.add(new On(new Led("pippo", "prova", 4)));
-        sendable.add(new Off(new Led("pippo", "prova", 5)));
-        sendable.add(new On(new Led("pippo", "prova", 6)));
-        sendable.add(new Off(new Led("pippo", "prova", 7)));
-        this.macros.add(new Macro("test", sendable));
-        this.listAdapter.updateMacros(this.macros);
-        MacroUtils.saveMacrosToFile(MainActivity.getAppContext(), Wiki.Controller.MACRO_FILENAME, this.macros);
-        this.listAdapter.notifyDataSetChanged();
+        Intent intent = new Intent(this, EditMacroActivity.class);
+        startActivity(intent);
     }
 
     @Override
