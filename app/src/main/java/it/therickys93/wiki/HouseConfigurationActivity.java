@@ -93,9 +93,7 @@ public class HouseConfigurationActivity extends AppCompatActivity implements Ada
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int index, long l) {
-        if(leds == null){
-
-        } else {
+        if(leds != null && leds.size() > 0){
             this.leds.remove(index);
             this.adapter.updateLeds(this.leds);
             MainActivity.house.removeLedAt(index);

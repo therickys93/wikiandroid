@@ -12,4 +12,11 @@
         <item>8</item>
     </string-array>
 
+    <string-array name="actions_arrays">
+        <item>Accendi</item>
+        <item>Spegni</item>
+        <item>Apri</item>
+        <item>Chiudi</item>
+    </string-array>
+
 </resources>

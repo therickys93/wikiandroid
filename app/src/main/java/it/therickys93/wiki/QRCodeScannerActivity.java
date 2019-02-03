@@ -2,7 +2,6 @@ package it.therickys93.wiki;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
@@ -20,10 +19,7 @@ import android.widget.Toast;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
-import com.budiyev.android.codescanner.ErrorCallback;
 import com.google.zxing.Result;
-
-import java.io.File;
 
 public class QRCodeScannerActivity extends AppCompatActivity {
 
