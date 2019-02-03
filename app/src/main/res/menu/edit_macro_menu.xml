@@ -4,7 +4,12 @@
 
     <item
         android:id="@+id/save_macro"
-        android:title="Save"
+        android:title="Salva"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/cancel_macro"
+        android:title="Cancella"
+        app:showAsAction="always" />
 
 </menu>

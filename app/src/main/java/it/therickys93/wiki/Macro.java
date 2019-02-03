@@ -26,6 +26,10 @@ public class Macro
         this.name = name;
     }
 
+    public void setSendable(List<Sendable> sendable){
+        this.sendable = sendable;
+    }
+
     public String getName() {
         return this.name;
     }
