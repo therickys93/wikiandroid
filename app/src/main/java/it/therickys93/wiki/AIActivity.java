@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import com.parse.Parse;
+
 public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
     private ImageButton button;
@@ -44,6 +46,14 @@ public class AIActivity extends AppCompatActivity implements TextToSpeech.OnInit
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ai);
+
+        Parse.initialize(new Parse.Configuration.Builder(this)
+            .applicationId("therickys93-wiki")
+            // if defined
+            .clientKey("android-therickys93-wiki")
+            .server("https://therickys93-wiki.herokuapp.com/parse/")
+            .build()
+        );
 
         MainActivity.createAppContext(getApplicationContext());
 
